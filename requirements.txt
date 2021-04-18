@@ -1,0 +1,6 @@
+beautifulsoup4==4.9.3
+django==3.2.0
+# pandas==1.1.5
+plotly==4.14.3
+requests==2.25.1
+tqdm==4.58.0
