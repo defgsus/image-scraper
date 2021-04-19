@@ -1,6 +1,7 @@
 beautifulsoup4==4.9.3
 django==3.2.0
+git+https://github.com/openai/CLIP
 # pandas==1.1.5
-plotly==4.14.3
+psycopg2-binary
 requests==2.25.1
 tqdm==4.58.0
