@@ -70,8 +70,6 @@ def get_clip_features(
 
 
 def _process_image_batch(images: List[ImageModel], device: str = "cpu", verbosity: int = 0):
-    if verbosity > 1:
-        print("batch")
 
     model, preprocess = get_clip_model(device=device)
 
