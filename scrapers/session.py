@@ -2,7 +2,7 @@ import os
 import sys
 import hashlib
 import pathlib
-from typing import Tuple
+from typing import Tuple, Optional
 
 import requests
 from bs4 import BeautifulSoup
@@ -55,10 +55,14 @@ class ScrapingSession:
     def download_image(
             self,
             url: str,
+            hash_url: Optional[str] = None,
             short_filename: bool = False,
     ) -> Tuple[str, bool]:
+        if hash_url is None:
+            hash_url = url
+        url_hash = hashlib.md5(hash_url.encode("ascii", errors="replace")).hexdigest()
+
         img_ext = url.split("?")[0].split(".")[-1] or "unknown"
-        url_hash = hashlib.md5(url.encode("ascii", errors="replace")).hexdigest()
         image_dir = self.image_dir / url_hash[:2]
         image_file = image_dir / f"{url_hash}.{img_ext}"
 

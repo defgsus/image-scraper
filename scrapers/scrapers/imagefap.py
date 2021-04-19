@@ -88,7 +88,11 @@ class GalleryScraper:
                 ))
 
         for url, thumb_url in image_urls:
-            filename, downloaded = self.session.download_image(thumb_url, short_filename=True)
+            filename, downloaded = self.session.download_image(
+                url=thumb_url,
+                hash_url=thumb_url.split("?")[0],  # remove the query from url because it's constantly changing
+                short_filename=True,
+            )
             if not ImageModel.objects.filter(thumb_filename=filename).exists():
                 ImageModel.objects.create(
                     scraper=self.scraper_model,

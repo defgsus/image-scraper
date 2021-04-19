@@ -33,13 +33,13 @@ class ImageModel(TimestampedModel):
     )
 
     thumb_filename = models.CharField(
-        verbose_name=_("Filename of downloaded image"),
+        verbose_name=_("Filename of downloaded thumbnail image"),
         max_length=128,
         db_index=True,
     )
 
     thumb_url = models.URLField(
-        verbose_name=_("URL of image"),
+        verbose_name=_("URL of thumbnail image"),
         max_length=1024,
         null=True,
         db_index=True,
