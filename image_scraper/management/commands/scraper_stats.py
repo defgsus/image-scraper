@@ -4,7 +4,7 @@ import datetime
 from django.core.management.base import BaseCommand, CommandError
 from django.core.files import File
 
-from image_scraper.models import ScraperModel, ImageModel
+from image_scraper.models import ScraperModel, ImageModel, MetaModel
 
 
 class Command(BaseCommand):
@@ -29,5 +29,8 @@ class Command(BaseCommand):
                 continue
 
             qset = ImageModel.objects.filter(scraper=scraper_model)
-            count = qset.count()
-            print(f"{scraper}: {count} images")
+            meta_qset = MetaModel.objects.filter(scraper=scraper_model)
+            print(f"{scraper}:")
+            print(f"  {meta_qset.count()} meta")
+            print(f"  {qset.count()} images")
+            print(f"  {qset.exclude(image_features=None).count()} image features")

@@ -1,7 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+import PIL.Image
+
 from .TimestampedModel import TimestampedModel
+from scrapers import ScrapingSession
 
 
 class ImageModel(TimestampedModel):
@@ -54,3 +57,8 @@ class ImageModel(TimestampedModel):
 
     def __str__(self):
         return f"{self.scraper.name}/{self.pk}"
+
+    def load(self) -> PIL.Image.Image:
+        filename = self.filename or self.thumb_filename
+        filename = ScrapingSession.IMAGE_DIR / filename
+        return PIL.Image.open(filename)
