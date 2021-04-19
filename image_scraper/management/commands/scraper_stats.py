@@ -30,7 +30,9 @@ class Command(BaseCommand):
 
             qset = ImageModel.objects.filter(scraper=scraper_model)
             meta_qset = MetaModel.objects.filter(scraper=scraper_model)
+            feature_qset = qset.exclude(image_features=None)
             print(f"{scraper}:")
-            print(f"  {meta_qset.count()} meta")
-            print(f"  {qset.count()} images")
-            print(f"  {qset.exclude(image_features=None).count()} image features")
+            print(f"  {meta_qset.count():10} meta infos")
+            print(f"  {qset.count():10} images")
+            print(f"  {feature_qset.filter(image_features__ok=True).count():10} image features")
+            print(f"  {feature_qset.filter(image_features__ok=False).count():10} image features failed")
