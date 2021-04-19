@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'image_scraper',
     'scrapers',
     'clip_features',
+    'views',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,11 @@
+{% extends "./base.html" %}
+
+{% block content %}
+
+
+{% for image in images %}
+    <img src="image/{{image.filename}}" title="{{image.scraper}}">
+{% endfor %}
+
+
+{% endblock %}

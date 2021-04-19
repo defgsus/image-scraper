@@ -58,7 +58,21 @@ class ImageModel(TimestampedModel):
     def __str__(self):
         return f"{self.scraper.name}/{self.pk}"
 
-    def load(self) -> PIL.Image.Image:
+    def load_image(self) -> PIL.Image.Image:
         filename = self.filename or self.thumb_filename
         filename = ScrapingSession.IMAGE_DIR / filename
         return PIL.Image.open(filename)
+
+    def load_file(self) -> bytes:
+        filename = self.filename or self.thumb_filename
+        filename = ScrapingSession.IMAGE_DIR / filename
+        with open(filename, "rb") as fp:
+            return fp.read()
+
+    def mime_type(self) -> str:
+        fn = self.filename.lower()
+        ext = fn.split(".")[-1]
+        if ext == "jpeg":
+            ext = "jpg"
+        return f"imag/{ext}"
+

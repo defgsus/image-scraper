@@ -78,7 +78,7 @@ def _process_image_batch(images: List[ImageModel], device: str = "cpu", verbosit
     torch_image_batch = []
     for image_model in images:
         try:
-            image = image_model.load()
+            image = image_model.load_image()
             image = preprocess(image)
             torch_image_batch.append(image)
             processed_image_models.append(image_model)

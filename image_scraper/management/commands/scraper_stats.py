@@ -13,7 +13,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             "--scraper", type=str, nargs="+",
-            help="One or many scraper names to display"
+            help="One or many scraper names to display, leave empty to show all"
         )
 
     def handle(self, *args, **options):
@@ -35,4 +35,6 @@ class Command(BaseCommand):
             print(f"  {meta_qset.count():10} meta infos")
             print(f"  {qset.count():10} images")
             print(f"  {feature_qset.filter(image_features__ok=True).count():10} image features")
-            print(f"  {feature_qset.filter(image_features__ok=False).count():10} image features failed")
+            num_failures = feature_qset.filter(image_features__ok=False).count()
+            if num_failures:
+                print(f"  {num_failures:10} image features failed")
