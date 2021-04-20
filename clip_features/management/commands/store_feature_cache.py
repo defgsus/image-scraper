@@ -16,7 +16,10 @@ class Command(BaseCommand):
     help = 'Create cache files of previously calculated image features'
 
     def add_arguments(self, parser):
-        pass
+        parser.add_argument(
+            "--batch-size", type=int, default=0,
+            help="Number of image features to pack into one numpy file. default is all images"
+        )
 
     def handle(self, *args, **options):
         create_feature_cache(**options)

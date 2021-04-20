@@ -10,6 +10,21 @@ import numpy as np
 CACHE_DIR = settings.BASE_DIR / "cache" / "features"
 
 
+_cached_features = None
+
+
+def cached_image_features() -> Tuple[List[int], np.ndarray]:
+    global _cached_features
+    if not _cached_features:
+        _cached_features = {
+            "features": np.load(CACHE_DIR / "features_0.npy")
+        }
+        with open(CACHE_DIR / f"pks_0.json") as fp:
+            _cached_features["pks"] = json.load(fp)
+
+    return _cached_features["pks"], _cached_features["features"]
+
+
 def iter_cached_features() -> Generator[Tuple[List[int], np.ndarray], None, None]:
     """
     Iterates through all cached features

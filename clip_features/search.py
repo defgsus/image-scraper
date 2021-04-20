@@ -3,10 +3,27 @@ from typing import List, Tuple
 import numpy as np
 
 from .clip_model import get_text_features
-from .cache import iter_cached_features
+from .cache import CACHE_DIR, iter_cached_features, cached_image_features
 
 
 def search_images(text: str, count: int = 20) -> List[Tuple["ImageModel", float]]:
+    from image_scraper.models import ImageModel
+
+    text_features = get_text_features(text)
+
+    pks, image_features = cached_image_features()
+
+    sim = 100. * text_features @ image_features.T
+
+    top_idxs = np.argsort(sim)[::-1][:count].tolist()
+
+    return [
+        (ImageModel.objects.get(pk=pks[i]), sim[i])
+        for i in top_idxs
+    ]
+
+
+def search_images_batch_iter(text: str, count: int = 20) -> List[Tuple["ImageModel", float]]:
     from image_scraper.models import ImageModel
 
     text_features = get_text_features(text)
