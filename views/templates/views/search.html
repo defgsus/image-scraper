@@ -1,0 +1,21 @@
+{% extends "./base.html" %}
+
+{% block content %}
+
+<form>
+    <label>
+        search
+        <input type="text" name="q" value="{{param_q}}">
+    </label>
+</form>
+
+<hr>
+
+{% for image in images %}
+    <a href="{{image.url}}" rel="noreferrer">
+        <img src="image/{{image.pk}}.{{image.extension}}" title="{{image.scraper}}">
+    </a>
+{% endfor %}
+
+
+{% endblock %}

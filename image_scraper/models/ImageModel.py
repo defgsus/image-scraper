@@ -69,9 +69,12 @@ class ImageModel(TimestampedModel):
         with open(filename, "rb") as fp:
             return fp.read()
 
+    def file_extension(self):
+        fn = (self.filename or self.thumb_filename).lower()
+        return fn.split(".")[-1]
+
     def mime_type(self) -> str:
-        fn = self.filename.lower()
-        ext = fn.split(".")[-1]
+        ext = self.file_extension()
         if ext == "jpeg":
             ext = "jpg"
         return f"imag/{ext}"

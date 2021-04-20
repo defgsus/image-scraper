@@ -8,14 +8,19 @@ class ImageView(View):
 
     def get(self, request, filename):
         try:
-            model = ImageModel.objects.get(filename=filename)
-        except ImageModel.DoesNotExist:
-            try:
-                model = ImageModel.objects.get(thumb_filename=filename)
-            except ImageModel.DoesNotExist:
-                return HttpResponse(status=404)
+            pk, ext = filename.split(".")
+        except:
+            return HttpResponse(status=404)
 
-        return HttpResponse(
-            content=model.load_file(),
-            headers={"Mime-Type": model.mime_type()},
-        )
+        try:
+            model = ImageModel.objects.get(pk=pk)
+        except ImageModel.DoesNotExist:
+            return HttpResponse(status=404)
+
+        try:
+            return HttpResponse(
+                content=model.load_file(),
+                headers={"Mime-Type": model.mime_type()},
+            )
+        except:
+            return HttpResponse(status=500)
