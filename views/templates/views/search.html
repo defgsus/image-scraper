@@ -13,7 +13,7 @@
 
 {% for image in images %}
     <a href="{{image.url}}" rel="noreferrer">
-        <img src="image/{{image.pk}}.{{image.extension}}" title="{{image.scraper}}">
+        <img src="image/{{image.pk}}.{{image.extension}}" title="{{image.scraper}}: {{image.score}}">
     </a>
 {% endfor %}
 

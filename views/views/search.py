@@ -11,12 +11,15 @@ class SearchImagesView(View):
         text = request.GET.get("q")
 
         if not text:
-            image_qset = ImageModel.objects.all().order_by("pk")
+            images = [
+                (img, 0)
+                for img in ImageModel.objects.all().order_by("pk")[:23]
+            ]
         else:
-            image_qset = search_images(text)
+            images = search_images(text)
 
         images_data = []
-        for image in image_qset[:23]:
+        for image, score in images:
             images_data.append({
                 "pk": image.pk,
                 "caption": image.caption,
@@ -24,6 +27,7 @@ class SearchImagesView(View):
                 "filename": image.filename or image.thumb_filename,
                 "extension": image.file_extension(),
                 "url": image.url,
+                "score": score,
             })
 
         context = {
