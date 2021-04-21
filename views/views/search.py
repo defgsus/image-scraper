@@ -110,4 +110,6 @@ class SearchImagesView(View):
             "param_sim_amt": similar_amount,
             "param_count": count,
         }
-        return render(request, "views/search.html", context)
+        response = render(request, "views/search.html", context)
+        response.headers["Content-Security-Policy"] = "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+        return response
