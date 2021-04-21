@@ -3,14 +3,18 @@
 {% block content %}
 
 <form>
-    <label>
-        search
-        <input type="text" name="q" value="{{param_q}}" style="width: 100%">
-    </label>
-    <label>
-        count
-        <input type="number" name="count" value="{{param_count}}" min="1">
-    </label>
+    <div>
+        <label>
+            natural language prompt
+            <input type="text" name="q" value="{{param_q}}" style="width: 60%">
+        </label>
+    </div>
+    <div>
+        <label>
+            count
+            <input type="number" name="count" value="{{param_count}}" min="1">
+        </label>
+    </div>
     <button type="submit">search</button>
 </form>
 

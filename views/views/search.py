@@ -8,7 +8,7 @@ from clip_features import search_images
 class SearchImagesView(View):
 
     def get(self, request):
-        text = request.GET.get("q")
+        text = request.GET.get("q") or "a beautiful sunset"
         try:
             count = int(request.GET.get("count", 20))
         except:
