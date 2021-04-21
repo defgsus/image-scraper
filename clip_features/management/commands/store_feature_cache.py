@@ -22,18 +22,25 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        create_feature_cache(**options)
+        store_feature_cache(**options)
 
 
-def create_feature_cache(
-        batch_size: int = 100000,
+def store_feature_cache(
+        batch_size: int = 0,
         verbosity: int = 0,
         **kwargs,
 ):
-    qset = ImageModel.objects.exclude(image_features=None).order_by("pk")
+    qset = (
+        ImageModel.objects
+            .exclude(image_features=None)
+            .exclude(image_features__ok=False)
+            .order_by("pk")
+    )
 
     count = qset.count()
-
+    if not batch_size:
+        batch_size = count
+        
     for i in range(0, count, batch_size):
         if verbosity > 1:
             print(f"exporting {batch_size} / {count} features")

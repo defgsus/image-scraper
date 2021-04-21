@@ -5,16 +5,24 @@
 <form>
     <label>
         search
-        <input type="text" name="q" value="{{param_q}}">
+        <input type="text" name="q" value="{{param_q}}" style="width: 100%">
     </label>
+    <label>
+        count
+        <input type="number" name="count" value="{{param_count}}" min="1">
+    </label>
+    <button type="submit">search</button>
 </form>
 
 <hr>
 
 {% for image in images %}
-    <a href="{{image.url}}" rel="noreferrer">
-        <img src="image/{{image.pk}}.{{image.extension}}" title="{{image.scraper}}: {{image.score}}">
-    </a>
+    <div style="display: inline-block">
+        <a href="{{image.url}}" rel="noreferrer">
+            <img src="image/{{image.pk}}.{{image.extension}}" title="{{image.scraper}}: {{image.score}}">
+        </a>
+        <div>{{image.score}}</div>
+    </div>
 {% endfor %}
 
 

@@ -13,7 +13,7 @@ def search_images(text: str, count: int = 20) -> List[Tuple["ImageModel", float]
 
     pks, image_features = cached_image_features()
 
-    sim = 100. * text_features @ image_features.T
+    sim = text_features @ image_features.T
 
     top_idxs = np.argsort(sim)[::-1][:count].tolist()
 
