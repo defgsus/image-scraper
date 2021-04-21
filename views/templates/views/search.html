@@ -9,26 +9,36 @@
         <div style="padding-left: 3rem">
             <div>
                 <label>
-                    include
+                    <span style="display: inline-block; width: 5rem">include</span>
+                    <input type="number" name="q_amt" value="{{param_q_amt}}" style="width: 3rem" step="0.1">
                     <input type="text" name="q" value="{{param_q}}" style="width: 60%">
                 </label>
             </div>
             <div>
                 <label>
-                    exclude
+                    <span style="display: inline-block; width: 5rem">exclude</span>
                     <input type="number" name="qn_amt" value="{{param_qn_amt}}" style="width: 3rem" step="0.1">
                     <input type="text" name="qn" value="{{param_qn}}" style="width: 60%">
                 </label>
             </div>
         </div>
+        <p>image similarity</p>
+        <div style="padding-left: 3rem">
+            <div>
+                <label>
+                    <span style="display: inline-block; width: 5rem">image ID</span>
+                    <input type="number" name="sim_amt" value="{{param_sim_amt}}" style="width: 3rem" step="0.01">
+                    <input type="text" name="sim" value="{{param_sim}}">
+                </label>
+            </div>
+        </div>
     </div>
-    <div>
-        <label>
-            count
-            <input type="number" name="count" value="{{param_count}}" min="1">
-        </label>
-    </div>
-    <button type="submit">search</button>
+    <br>
+    <button type="submit">go</button>
+    <label>
+        count
+        <input type="number" name="count" value="{{param_count}}" min="1">
+    </label>
 </form>
 
 <hr>
