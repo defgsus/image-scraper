@@ -23,3 +23,4 @@ def get_text_features(text: str, device: str = "cpu") -> np.ndarray:
         features = model.encode_text(tokens).cpu().numpy()
 
     return features[0]
+

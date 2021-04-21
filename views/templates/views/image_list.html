@@ -1,0 +1,12 @@
+
+{% for image in images %}
+<div style="display: inline-block">
+    <a href="{{image.url}}" rel="noreferrer">
+        <img src="{% url 'views:image' image.filename %}" title="{{image.scraper}}: {{image.score}}">
+    </a>
+    <div>
+        {{image.score}}
+        <a href="{% url 'views:same' image.pk %}?count={{param_count}}" style="font-size: .75rem">similar</a>
+    </div>
+</div>
+{% endfor %}

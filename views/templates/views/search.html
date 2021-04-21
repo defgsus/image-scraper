@@ -33,14 +33,6 @@
 
 <hr>
 
-{% for image in images %}
-    <div style="display: inline-block">
-        <a href="{{image.url}}" rel="noreferrer">
-            <img src="image/{{image.filename}}" title="{{image.scraper}}: {{image.score}}">
-        </a>
-        <div>{{image.score}}</div>
-    </div>
-{% endfor %}
-
+{% include "./image_list.html" %}
 
 {% endblock %}

@@ -1,0 +1,22 @@
+{% extends "./base.html" %}
+
+{% block content %}
+
+<a href="{% url 'views:search' %}">back to search</a>
+
+<form method="get">
+    {% csrf_token %}
+    <div>
+        <label>
+            count
+            <input type="number" name="count" value="{{param_count}}" min="1">
+        </label>
+    </div>
+    <button type="submit">update</button>
+</form>
+
+<hr>
+
+{% include "./image_list.html" %}
+
+{% endblock %}
