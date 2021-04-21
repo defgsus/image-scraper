@@ -2,12 +2,25 @@
 
 {% block content %}
 
-<form>
+<form method="post">
+    {% csrf_token %}
     <div>
-        <label>
-            natural language prompt
-            <input type="text" name="q" value="{{param_q}}" style="width: 60%">
-        </label>
+        <p>natural language prompt</p>
+        <div style="padding-left: 3rem">
+            <div>
+                <label>
+                    include
+                    <input type="text" name="q" value="{{param_q}}" style="width: 60%">
+                </label>
+            </div>
+            <div>
+                <label>
+                    exclude
+                    <input type="number" name="qn_amt" value="{{param_qn_amt}}" style="width: 3rem" step="0.1">
+                    <input type="text" name="qn" value="{{param_qn}}" style="width: 60%">
+                </label>
+            </div>
+        </div>
     </div>
     <div>
         <label>
@@ -23,7 +36,7 @@
 {% for image in images %}
     <div style="display: inline-block">
         <a href="{{image.url}}" rel="noreferrer">
-            <img src="image/{{image.pk}}.{{image.extension}}" title="{{image.scraper}}: {{image.score}}">
+            <img src="image/{{image.filename}}" title="{{image.scraper}}: {{image.score}}">
         </a>
         <div>{{image.score}}</div>
     </div>

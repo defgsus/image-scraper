@@ -1,26 +1,29 @@
 from django.views import View
 from django.http import HttpResponse
 
+import PIL.Image
+
 from image_scraper.models import ImageModel
+from scrapers import ScrapingSession
 
 
 class ImageView(View):
 
     def get(self, request, filename):
-        try:
-            pk, ext = filename.split(".")
-        except:
-            return HttpResponse(status=404)
+        if ".." not in filename:
+            try:
+                mime_type = filename.split(".")[-1]
+                if mime_type == "jpeg":
+                    mime_type = "jpg"
+                mime_type = f"image/{mime_type}"
 
-        try:
-            model = ImageModel.objects.get(pk=pk)
-        except ImageModel.DoesNotExist:
-            return HttpResponse(status=404)
+                full_name = ScrapingSession.IMAGE_DIR / filename
+                with open(full_name, "rb") as fp:
+                    return HttpResponse(
+                        content=fp.read(),
+                        headers={"Mime-Type": mime_type},
+                    )
+            except:
+                pass
 
-        try:
-            return HttpResponse(
-                content=model.load_file(),
-                headers={"Mime-Type": model.mime_type()},
-            )
-        except:
-            return HttpResponse(status=500)
+        return HttpResponse(status=404)

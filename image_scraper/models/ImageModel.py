@@ -77,5 +77,5 @@ class ImageModel(TimestampedModel):
         ext = self.file_extension()
         if ext == "jpeg":
             ext = "jpg"
-        return f"imag/{ext}"
+        return f"image/{ext}"
 
