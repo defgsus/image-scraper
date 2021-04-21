@@ -1,3 +1,5 @@
+from typing import Union, List
+
 import numpy as np
 import torch
 
@@ -15,12 +17,21 @@ def get_clip_model(name: str = "ViT-B/32", device: str = "cpu"):
     return _CLIP_INSTANCES[key]
 
 
-def get_text_features(text: str, device: str = "cpu") -> np.ndarray:
+def get_text_features(text: Union[str, List[str]], device: str = "cpu") -> np.ndarray:
     model, _ = get_clip_model()
 
-    tokens = clip.tokenize([text]).to(device)
+    is_array = not isinstance(text, str)
+    if not is_array:
+        text = [text]
+
+    tokens = clip.tokenize(text).to(device)
     with torch.no_grad():
         features = model.encode_text(tokens).cpu().numpy()
 
-    return features[0]
+    features /= np.linalg.norm(features, axis=-1, keepdims=True)
+
+    if is_array:
+        return features
+    else:
+        return features[0]
 

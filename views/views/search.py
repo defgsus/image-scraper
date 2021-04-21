@@ -34,11 +34,8 @@ class SearchImagesView(View):
 
         pks, image_features = cached_image_features()
 
-        text_features = np.stack([
-            get_text_features(text_include),
-            get_text_features(text_exclude),
-        ])
-
+        text_features = get_text_features([text_include, text_exclude])
+        print("TEXT", text_features.shape, image_features.shape)
         scores = text_features @ image_features.T
 
         if text_exclude and exclude_amount:

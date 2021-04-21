@@ -19,6 +19,12 @@ def cached_image_features() -> Tuple[List[int], np.ndarray]:
         _cached_features = {
             "features": np.load(CACHE_DIR / "features_0.npy")
         }
+
+        _cached_features["features"] /= np.linalg.norm(
+            _cached_features["features"],
+            axis=-1, keepdims=True
+        )
+
         with open(CACHE_DIR / f"pks_0.json") as fp:
             _cached_features["pks"] = json.load(fp)
 
