@@ -137,6 +137,8 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+DEBUG_STATIC = True
+
 try:
     from .settings_local import *
     try:
@@ -145,3 +147,5 @@ try:
         pass
 except ImportError:
     pass
+
+
