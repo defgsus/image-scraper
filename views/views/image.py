@@ -27,3 +27,16 @@ class ImageView(View):
                 pass
 
         return HttpResponse(status=404)
+
+
+class ImagePkView(View):
+
+    def get(self, request, pk):
+        try:
+            image = ImageModel.objects.get(pk=pk)
+            return HttpResponse(
+                content=image.load_file(),
+                headers={"Mime-Type": image.mime_type()},
+            )
+        except:
+            return HttpResponse(status=404)

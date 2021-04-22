@@ -1,9 +1,20 @@
 <!DOCTYPE html>
+{% load static %}
+
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval'">
-
     <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+    <meta name="referrer" content="no-referrer">
+
+    {% for filename in extra_css %}
+        <link rel="stylesheet" href="{% static filename %}">
+    {% endfor %}
+
+    {% for filename in extra_js %}
+        <script type="text/javascript" src="{% static filename %}"></script>
+    {% endfor %}
+
     <title>{{ title }}</title>
 </head>
 <body>

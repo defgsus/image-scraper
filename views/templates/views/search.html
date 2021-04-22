@@ -2,47 +2,60 @@
 
 {% block content %}
 
-<form method="post">
-    {% csrf_token %}
-    <div>
-        <p>natural language prompt</p>
-        <div style="padding-left: 3rem">
-            <div>
-                <label>
-                    <span style="display: inline-block; width: 5rem">include</span>
-                    <input type="number" name="q_amt" value="{{param_q_amt}}" style="width: 3rem" step="0.1">
-                    <input type="text" name="q" value="{{param_q}}" style="width: 60%">
-                </label>
-            </div>
-            <div>
-                <label>
-                    <span style="display: inline-block; width: 5rem">exclude</span>
-                    <input type="number" name="qn_amt" value="{{param_qn_amt}}" style="width: 3rem" step="0.1">
-                    <input type="text" name="qn" value="{{param_qn}}" style="width: 60%">
-                </label>
-            </div>
+{% csrf_token %}
+
+<div class="search"
+     data-url="{% url 'views:search' %}"
+     data-image-pk-url="{% url 'views:image-pk' 0 %}"
+>
+    <div class="row">
+        <div class="icon delete">X</div>
+        <div class="levels">
+            <div class="level">-5</div>
+            <div class="level">-4</div>
+            <div class="level">-3</div>
+            <div class="level">-2</div>
+            <div class="level">-1</div>
+            <div class="level">0</div>
+            <div class="level">1</div>
+            <div class="level">2</div>
+            <div class="level">3</div>
+            <div class="level selected">4</div>
+            <div class="level">5</div>
         </div>
-        <p>image similarity</p>
-        <div style="padding-left: 3rem">
-            <div>
-                <label>
-                    <span style="display: inline-block; width: 5rem">image ID</span>
-                    <input type="number" name="sim_amt" value="{{param_sim_amt}}" style="width: 3rem" step="0.01">
-                    <input type="text" name="sim" value="{{param_sim}}">
-                </label>
-            </div>
+        <div class="input">
+            <input type="text" value="a beautiful sunset">
         </div>
     </div>
-    <br>
-    <button type="submit">go</button>
-    <label>
-        count
-        <input type="number" name="count" value="{{param_count}}" min="1">
-    </label>
-</form>
+
+    <div class="row">
+        <div class="icon delete">X</div>
+        <div class="levels">
+            <div class="level">-5</div>
+            <div class="level">-4</div>
+            <div class="level">-3</div>
+            <div class="level">-2</div>
+            <div class="level">-1</div>
+            <div class="level">0</div>
+            <div class="level">1</div>
+            <div class="level">2</div>
+            <div class="level">3</div>
+            <div class="level">4</div>
+            <div class="level">5</div>
+        </div>
+        <div class="input">
+            <input type="text">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="icon add">+</div>
+    </div>
+</div>
 
 <hr>
 
-{% include "./image_list.html" %}
+<div class="images"></div>
+
 
 {% endblock %}

@@ -1,0 +1,81 @@
+body {
+    background: #333;
+    color: #ccc;
+    font-family: sans-serif;
+}
+
+input {
+    background: #444;
+    color: #ccc;
+    height: 1.5rem;
+}
+
+/*.search div {
+    border: 1px solid black;
+}*/
+
+.search .row {
+    position: relative;
+    display: grid;
+    grid: auto-flow / auto auto 4fr;
+    grid-gap: 1rem;
+    padding-bottom: .33rem;
+}
+
+.search .row .icon {
+    cursor: pointer;
+}
+
+.search .row .icon.delete {
+    color: #f00;
+}
+
+.search .row .icon.add {
+    color: #0a0;
+}
+
+.search .row .levels {
+    display: grid;
+    grid: auto-flow / repeat(11, 1fr);
+}
+
+.search .row .levels .level {
+    background: #555;
+    color: #777;
+    cursor: pointer;
+    margin: 2px;
+    text-align: center;
+    max-height: 1.3rem;
+    padding-top: 0.3rem;
+    min-width: 1rem;
+}
+
+.search .row .levels .level.highlight {
+    color: #aaa;
+}
+
+.search .row .levels .level.selected {
+    background: #ccc;
+    color: #333;
+}
+
+.search .row .input input {
+    width: 98%;
+    padding-left: .3rem;
+}
+
+.search .row .input img {
+    max-height: 3rem;
+}
+
+
+.images .image {
+    display: inline-block;
+    padding-right: .25rem;
+}
+
+.images .image .similar-click {
+    display: inline-block;
+    cursor: pointer;
+    font-size: .75rem;
+}
