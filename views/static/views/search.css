@@ -74,8 +74,10 @@ input {
     padding-right: .25rem;
 }
 
-.images .image .similar-click {
-    display: inline-block;
+.images .image img {
     cursor: pointer;
-    font-size: .75rem;
+}
+
+.images .image .source {
+    color: #aaa;
 }

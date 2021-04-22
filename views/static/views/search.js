@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let search_state = [
         {"type": "text", "value": "a beautiful sunset", "amount": 5},
         {"type": "text", "value": "trees", "amount": 0},
+        {"type": "text", "value": "a vast landscape", "amount": 0},
     ];
 
     function on_level_click(e) {
@@ -51,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function on_similar_click(e) {
         const
-            image_pk = e.target.parentElement.parentElement.getAttribute("data-pk");
+            image_pk = e.target.parentElement.getAttribute("data-pk");
         search_state.push({
             "type": "image", "value": image_pk, "amount": 5,
         });
@@ -116,13 +117,13 @@ document.addEventListener("DOMContentLoaded", () => {
             html += `<img src="${image.url}" title="${image.caption}">`;
 
             html += `<div><b>${Math.round(image.score * 100) / 100}</b> `;
-            html += `<div class="similar-click">similar</div>`;
+            html += `<a class="source" href="${image.original_url}" target="_blank">source</a>`;
             html += `</div>`;
 
             html += `</div>`;
         }
         document.querySelector(".images").innerHTML = html;
-        for (const elem of document.querySelectorAll(".images .image .similar-click")) {
+        for (const elem of document.querySelectorAll(".images .image img")) {
             elem.onclick = on_similar_click;
         }
     }
