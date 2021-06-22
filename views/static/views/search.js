@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
         {"type": "text", "value": "trees", "amount": 0},
         {"type": "text", "value": "a vast landscape", "amount": 0},
     ];
+    let image_count = 20;
 
     function on_level_click(e) {
         const
@@ -38,6 +39,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const row_idx = parseInt(e.target.parentElement.getAttribute("data-idx"));
         search_state.splice(row_idx, 1);
         render_search();
+        get_images();
+    }
+
+    function on_count_change(e) {
+        image_count = parseInt(document.querySelector('input[name="count"]').value) || 20;
         get_images();
     }
 
@@ -91,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         html += `<div class="row">`;
-        html += `<div class="icon add">+</div>`;
+        html += `<div class="icon add">+</div> <input name="count" type="number" min="1" value="${image_count}">`;
         html += `</div>`;
 
         document.querySelector(".search").innerHTML = html;
@@ -108,13 +114,14 @@ document.addEventListener("DOMContentLoaded", () => {
         for (const elem of document.querySelectorAll(".search .icon.delete")) {
             elem.onclick = on_delete_click;
         }
+        document.querySelector('.search input[name="count"]').onchange = on_count_change;
     }
 
     function render_images(images) {
         let html = ``;
         for (const image of images) {
             html += `<div class="image" data-pk="${image.pk}">`;
-            html += `<img src="${image.url}" title="${image.caption}">`;
+            html += `<img loading="lazy" src="${image.url}" title="${image.caption}">`;
 
             html += `<div><b>${Math.round(image.score * 100) / 100}</b> `;
             html += `<a class="source" href="${image.original_url}" target="_blank">source</a>`;
@@ -138,6 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     headers: {'X-CSRFToken': csrftoken},
                     body: JSON.stringify({
                         search_rows: search_state,
+                        count: image_count,
                     }),
                 }
             )
