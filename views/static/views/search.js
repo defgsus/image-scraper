@@ -3,7 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const
         csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value,
         search_url = document.querySelector(".search").getAttribute("data-url"),
-        image_pk_url = document.querySelector(".search").getAttribute("data-image-pk-url");
+        image_pk_url = document.querySelector(".search").getAttribute("data-image-pk-url"),
+        image_rate_url = document.querySelector(".search").getAttribute("data-image-rate-url");
 
     let search_state = [
         {"type": "text", "value": "a beautiful sunset", "amount": 5},
@@ -64,6 +65,28 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         render_search();
         get_images();
+    }
+
+    function on_rating_click(e) {
+        const
+            pk = e.target.getAttribute("data-pk"),
+            rate = e.target.getAttribute("data-rate"),
+            user = document.querySelector('input[name="rating-user"]').value;
+
+        window
+            .fetch(
+                image_rate_url,
+                {
+                    method: "post",
+                    headers: {'X-CSRFToken': csrftoken},
+                    body: JSON.stringify({pk, rate, user}),
+                }
+            )
+            .then(response => {
+                if (response.status === 201) {
+                    e.target.style = "background: green";
+                }
+            });
     }
 
     function render_search() {
@@ -127,11 +150,19 @@ document.addEventListener("DOMContentLoaded", () => {
             html += `<a class="source" href="${image.original_url}" target="_blank">source</a>`;
             html += `</div>`;
 
+            html += `<div>`;
+            html += `<button class="rating-button" data-rate="-1" data-pk="${image.pk}">👎</button>`;
+            html += `<button class="rating-button" data-rate="1" data-pk="${image.pk}">👍</button>`;
+            html += `</div>`;
+
             html += `</div>`;
         }
         document.querySelector(".images").innerHTML = html;
         for (const elem of document.querySelectorAll(".images .image img")) {
             elem.onclick = on_similar_click;
+        }
+        for (const elem of document.querySelectorAll(".images .rating-button")) {
+            elem.onclick = on_rating_click;
         }
     }
 

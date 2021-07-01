@@ -81,3 +81,15 @@ input {
 .images .image .source {
     color: #aaa;
 }
+
+.rating-button {
+    background: black;
+    border: 1px solid #888;
+    cursor: pointer;
+}
+
+.rating-button:hover {
+    background: #555;
+    border: 1px solid #888;
+    cursor: pointer;
+}
