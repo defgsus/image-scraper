@@ -8,7 +8,7 @@ from django.urls import reverse
 
 import numpy as np
 
-from image_scraper.models import ImageModel, ScraperModel
+from image_scraper.models import ImageModel, ScraperModel, ImageRateModel
 from clip_features.clip_model import get_text_features
 from clip_features.cache import cached_image_features
 
@@ -91,6 +91,16 @@ class SearchImagesView(View):
                     "original_url": image.url,
                     "score": round(score, 2),
                 })
+
+        # -- attach image ratings for current user --
+
+        image_ratings = ImageRateModel.objects.filter(
+            user=params.get("user") or "",
+            image__pk__in=[i["pk"] for i in images_data]
+        ).values_list("image__pk", "rate")
+        image_ratings = {r[0]: r[1] for r in image_ratings}
+        for i in images_data:
+            i["rating"] = image_ratings.get(i["pk"], 0)
 
         return JsonResponse({
             "images": images_data,

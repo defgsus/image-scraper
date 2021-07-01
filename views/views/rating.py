@@ -13,7 +13,9 @@ class ImageRatingView(View):
         pk = params.get("pk")
         rate = params.get("rate")
         user = params.get("user")
-        if not pk or rate is None or not user:
+        remove = bool(params.get("remove"))
+
+        if pk is None or rate is None or user is None:
             return HttpResponse(status=500)
 
         try:
@@ -24,11 +26,19 @@ class ImageRatingView(View):
         kwargs = {
             "image": image,
             "user": user,
-            "rate": rate,
         }
-        if not ImageRateModel.objects.filter(**kwargs).exists():
-            ImageRateModel.objects.create(**kwargs)
+        rating_exists = ImageRateModel.objects.filter(**kwargs).exists()
+        if remove:
+            if not rating_exists:
+                return HttpResponse(status=404)
+            else:
+                ImageRateModel.objects.filter(**kwargs).delete()
+                return HttpResponse(status=201)
+        else:
+            if rating_exists:
+                ImageRateModel.objects.filter(**kwargs).delete()
 
-        return HttpResponse(status=201)
+            ImageRateModel.objects.create(**kwargs, rate=rate)
+            return HttpResponse(status=201)
 
 

@@ -71,7 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const
             pk = e.target.getAttribute("data-pk"),
             rate = e.target.getAttribute("data-rate"),
-            user = document.querySelector('input[name="rating-user"]').value;
+            user = document.querySelector('input[name="rating-user"]').value,
+            remove_rating = e.target.classList.contains("active");
 
         window
             .fetch(
@@ -79,12 +80,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 {
                     method: "post",
                     headers: {'X-CSRFToken': csrftoken},
-                    body: JSON.stringify({pk, rate, user}),
+                    body: JSON.stringify({pk, rate, user, remove: remove_rating}),
                 }
             )
             .then(response => {
                 if (response.status === 201) {
-                    e.target.style = "background: green";
+                    render_rating_buttons(pk, remove_rating ? 0 : rate);
                 }
             });
     }
@@ -140,19 +141,36 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector('.search input[name="count"]').onchange = on_count_change;
     }
 
+    const rate_content_mapping = {
+        "-1": "👎",
+        "1": "👍",
+    };
+
+    function rating_buttons_html(image_pk, active_rating) {
+        let html = "";
+        const image_rating = `${active_rating}`;
+        for (const rate of Object.keys(rate_content_mapping)) {
+            const className = `rating-button${image_rating === rate ? " active" : ""} rate-${rate}`;
+            let title = image_rating === rate ? `remove rating ${rate}` : `set rating to ${rate}`;
+            html += `<button class="${className}" data-rate="${rate}" data-pk="${image_pk}"
+                            title="${title}"
+                            >${rate_content_mapping[rate]}</button>`;
+        }
+        return html
+    }
+
     function render_images(images) {
         let html = ``;
         for (const image of images) {
             html += `<div class="image" data-pk="${image.pk}">`;
             html += `<img loading="lazy" src="${image.url}" title="${image.caption}">`;
 
-            html += `<div><b>${Math.round(image.score * 100) / 100}</b> `;
-            html += `<a class="source" href="${image.original_url}" target="_blank">source</a>`;
-            html += `</div>`;
-
             html += `<div>`;
-            html += `<button class="rating-button" data-rate="-1" data-pk="${image.pk}">👎</button>`;
-            html += `<button class="rating-button" data-rate="1" data-pk="${image.pk}">👍</button>`;
+            html += `<div class="rating-buttons">${rating_buttons_html(image.pk, image.rating)}</div>`;
+
+            html += `<b>${Math.round(image.score * 100) / 100}</b> `;
+            html += `<a class="source" href="${image.original_url}" target="_blank">source</a>`;
+
             html += `</div>`;
 
             html += `</div>`;
@@ -166,9 +184,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    function render_rating_buttons(image_pk, active_rating) {
+        const elem = document.querySelector(`.image[data-pk="${image_pk}"]`).querySelector(".rating-buttons");
+        elem.innerHTML = rating_buttons_html(image_pk, active_rating);
+        for (const e of elem.querySelectorAll(".rating-button")) {
+            e.onclick = on_rating_click;
+        }
+    }
+
     function get_images() {
         //console.log(search_state);
-        const scraper = document.querySelector('select[name="scraper"]').value;
+        const
+            scraper = document.querySelector('select[name="scraper"]').value,
+            user = document.querySelector('input[name="rating-user"]').value;
+
         window
             .fetch(
                 search_url,
@@ -179,6 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         search_rows: search_state,
                         count: image_count,
                         scraper: scraper,
+                        user: user,
                     }),
                 }
             )
@@ -190,5 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     render_search();
 
-
+    document.querySelector('input[name="rating-user"]').onchange = e => {
+        get_images();
+    };
 });

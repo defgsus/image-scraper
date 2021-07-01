@@ -82,8 +82,13 @@ input {
     color: #aaa;
 }
 
+.rating-buttons {
+    display: inline-block;
+    margin-right: .5rem;
+}
+
 .rating-button {
-    background: black;
+    background: #000;
     border: 1px solid #888;
     cursor: pointer;
 }
@@ -93,3 +98,17 @@ input {
     border: 1px solid #888;
     cursor: pointer;
 }
+
+.rating-button.active {
+    background: green;
+}
+.rating-button.active:hover {
+    background: #585;
+}
+
+.rating-button.rate-1 { background: #030; }
+.rating-button.rate--1 { background: #300; }
+.rating-button.rate-1:hover { background: #242; }
+.rating-button.rate--1:hover { background: #422; }
+.rating-button.rate-1.active { background: #4a4; }
+.rating-button.rate--1.active { background: #a33; }
