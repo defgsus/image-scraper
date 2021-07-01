@@ -13,7 +13,7 @@ class ScrapingSession:
     CACHE_DIR = pathlib.Path(__file__).resolve().parent.parent / "cache" / "html"
     IMAGE_DIR = pathlib.Path(__file__).resolve().parent.parent / "images"
 
-    def __init__(self, scraper_name, args):
+    def __init__(self, scraper_name: str, args: dict):
         self.s = requests.Session()
         self.s.headers["User-Agent"] = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0"
         self.cached = args["cached"]
@@ -63,6 +63,8 @@ class ScrapingSession:
         url_hash = hashlib.md5(hash_url.encode("ascii", errors="replace")).hexdigest()
 
         img_ext = url.split("?")[0].split(".")[-1] or "unknown"
+        if "/" in img_ext:
+            img_ext = "unknown"
         image_dir = self.image_dir / url_hash[:2]
         image_file = image_dir / f"{url_hash}.{img_ext}"
 
