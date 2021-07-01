@@ -67,10 +67,15 @@ def _download_images(filename: str):
         page_url = row["photo_url"]
         thumb_url = photo_url + "?w=224"
 
-        filename, downloaded = session.download_image(
-            url=thumb_url,
-            short_filename=True,
-        )
+        try:
+            filename, downloaded = session.download_image(
+                url=thumb_url,
+                short_filename=True,
+            )
+        except Exception as e:
+            print(f"ERROR for {thumb_url}: {type(e).__name__}: {e}")
+            continue
+
         if not ImageModel.objects.filter(thumb_filename=filename).exists():
             ImageModel.objects.create(
                 scraper=scraper_model,
