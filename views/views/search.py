@@ -8,7 +8,7 @@ from django.urls import reverse
 
 import numpy as np
 
-from image_scraper.models import ImageModel
+from image_scraper.models import ImageModel, ScraperModel
 from clip_features.clip_model import get_text_features
 from clip_features.cache import cached_image_features
 
@@ -19,6 +19,9 @@ class SearchImagesView(View):
         context = {
             "extra_css": ["views/search.css"],
             "extra_js": ["views/search.js"],
+            "scrapers": list(
+                ScraperModel.objects.all().order_by("name").values_list("name", flat=True)
+            )
         }
         return render(request, "views/search.html", context)
 
@@ -27,7 +30,7 @@ class SearchImagesView(View):
         params.setdefault("count", 20)
 
         # get all image features (as much as fits in memory)
-        pks, image_features = cached_image_features()
+        pks, image_features = cached_image_features(scraper_name=params["scraper"])
 
         # convert search requests to features
 

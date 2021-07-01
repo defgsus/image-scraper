@@ -65,16 +65,18 @@ def _download_images(filename: str):
     for row in tqdm(rows):
         photo_url = row["photo_image_url"]
         page_url = row["photo_url"]
+        thumb_url = photo_url + "?w=224"
 
         filename, downloaded = session.download_image(
-            url=photo_url,
+            url=thumb_url,
             short_filename=True,
         )
-        if not ImageModel.objects.filter(filename=filename).exists():
+        if not ImageModel.objects.filter(thumb_filename=filename).exists():
             ImageModel.objects.create(
                 scraper=scraper_model,
                 meta_data=meta_model,
-                filename=filename,
                 # Note! This is a url to a html-page, not the actual image
                 url=page_url,
+                thumb_filename=filename,
+                thumb_url=thumb_url,
             )

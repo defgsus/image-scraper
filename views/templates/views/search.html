@@ -4,7 +4,17 @@
 
 {% csrf_token %}
 
-<input type="text" name="rating-user">
+<div class="global-interface">
+    <select name="scraper">
+        {% for s in scrapers %}
+            <option value="{{s}}" {% if s == "unsplash" %}selected{% endif %}>{{s}}</option>
+        {% endfor %}
+    </select>
+    <label>
+        rating user: <input type="text" name="rating-user">
+    </label>
+</div>
+
 <hr>
 
 <div class="search"

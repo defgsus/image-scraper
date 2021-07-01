@@ -6,12 +6,12 @@ from .clip_model import get_text_features
 from .cache import CACHE_DIR, iter_cached_features, cached_image_features
 
 
-def search_images(text: str, count: int = 20) -> List[Tuple["ImageModel", float]]:
+def search_images(scraper_name: str, text: str, count: int = 20) -> List[Tuple["ImageModel", float]]:
     from image_scraper.models import ImageModel
 
     text_features = get_text_features(text)
 
-    pks, image_features = cached_image_features()
+    pks, image_features = cached_image_features(scraper_name=scraper_name)
 
     sim = text_features @ image_features.T
 

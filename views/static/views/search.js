@@ -168,6 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function get_images() {
         //console.log(search_state);
+        const scraper = document.querySelector('select[name="scraper"]').value;
         window
             .fetch(
                 search_url,
@@ -177,6 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     body: JSON.stringify({
                         search_rows: search_state,
                         count: image_count,
+                        scraper: scraper,
                     }),
                 }
             )

@@ -57,6 +57,7 @@ class ScrapingSession:
             url: str,
             hash_url: Optional[str] = None,
             short_filename: bool = False,
+            resize_min: int = 0,
     ) -> Tuple[str, bool]:
         if hash_url is None:
             hash_url = url
