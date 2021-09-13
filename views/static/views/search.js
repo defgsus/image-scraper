@@ -11,7 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
         {"type": "text", "value": "trees", "amount": 0},
         {"type": "text", "value": "a vast landscape", "amount": 0},
     ];
-    let image_count = 20;
+    let
+        image_count = 20,
+        extra_image_count = 0;
 
     function on_level_click(e) {
         const
@@ -88,6 +90,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     render_rating_buttons(pk, remove_rating ? 0 : rate);
                 }
             });
+    }
+
+    function on_more_images_click(e) {
+        e.stopPropagation();
+        extra_image_count += image_count;
+        get_images(true);
     }
 
     function render_search() {
@@ -175,6 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             html += `</div>`;
         }
+        html += `<button class="more-images">+</button>`;
         document.querySelector(".images").innerHTML = html;
         for (const elem of document.querySelectorAll(".images .image img")) {
             elem.onclick = on_similar_click;
@@ -182,6 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
         for (const elem of document.querySelectorAll(".images .rating-button")) {
             elem.onclick = on_rating_click;
         }
+        document.querySelector("button.more-images").onclick = on_more_images_click;
     }
 
     function render_rating_buttons(image_pk, active_rating) {
@@ -192,8 +202,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function get_images() {
+    function get_images(keep_extra_image_count=false) {
         //console.log(search_state);
+        if (!keep_extra_image_count)
+            extra_image_count = 0;
+
         const
             scraper = document.querySelector('select[name="scraper"]').value,
             user = document.querySelector('input[name="rating-user"]').value;
@@ -206,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     headers: {'X-CSRFToken': csrftoken},
                     body: JSON.stringify({
                         search_rows: search_state,
-                        count: image_count,
+                        count: image_count + extra_image_count,
                         scraper: scraper,
                         user: user,
                     }),
