@@ -98,6 +98,25 @@ document.addEventListener("DOMContentLoaded", () => {
         get_images(true);
     }
 
+    let last_mouse_y, last_mouse_y_count = 0;
+    function on_mouse_wheel(e) {
+        if (e.deltaY <= 0)
+            return;
+        if (last_mouse_y === e.layerY) {
+            last_mouse_y_count += 1;
+            if (last_mouse_y_count > 10) {
+                last_mouse_y_count = 0;
+                extra_image_count += image_count;
+                get_images(true);
+            }
+        }
+        else
+            last_mouse_y_count = 0;
+        last_mouse_y = e.layerY;
+    }
+
+    window.onwheel = on_mouse_wheel;
+
     function render_search() {
         let html = ``;
 
