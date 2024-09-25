@@ -54,17 +54,18 @@ def store_feature_cache(
     if not batch_size:
         batch_size = count
 
-    for i in range(0, count, batch_size):
+    for i in range(count // batch_size):
+        features_filename = CACHE_DIR / scraper / f"features_{i}.npy"
         if verbosity > 1:
-            print(f"exporting {batch_size} / {count} features")
+            print(f"exporting {batch_size:,} / {count:,} features to {features_filename}")
 
-        batch_qset = qset[i*batch_size:(i+1)*batch_size]
+        batch_qset = qset[i * batch_size : (i + 1) * batch_size]
         features = batch_qset.values_list("image_features__features", flat=True)
 
         features = np.stack(features)
 
         os.makedirs(CACHE_DIR / scraper, exist_ok=True)
-        np.save(CACHE_DIR / scraper / f"features_{i}.npy", features)
+        np.save(features_filename, features)
         del features
 
         pks = list(batch_qset.values_list("pk", flat=True))

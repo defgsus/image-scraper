@@ -13,11 +13,11 @@ CACHE_DIR = settings.BASE_DIR / "cache" / "features"
 _cached_features = dict()
 
 
-def cached_image_features(scraper_name: str) -> Tuple[List[int], np.ndarray]:
+def cached_image_features(scraper_name: str, index: int = 600000) -> Tuple[List[int], np.ndarray]:
     global _cached_features
     if scraper_name not in _cached_features:
         _cached_features[scraper_name] = {
-            "features": np.load(CACHE_DIR / scraper_name / "features_0.npy")
+            "features": np.load(CACHE_DIR / scraper_name / f"features_{index}.npy")
         }
 
         _cached_features[scraper_name]["features"] /= np.linalg.norm(
@@ -25,7 +25,7 @@ def cached_image_features(scraper_name: str) -> Tuple[List[int], np.ndarray]:
             axis=-1, keepdims=True
         )
 
-        with open(CACHE_DIR / scraper_name / f"pks_0.json") as fp:
+        with open(CACHE_DIR / scraper_name / f"pks_{index}.json") as fp:
             _cached_features[scraper_name]["pks"] = json.load(fp)
 
     return _cached_features[scraper_name]["pks"], _cached_features[scraper_name]["features"]

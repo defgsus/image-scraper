@@ -1,17 +1,25 @@
 import os
 import sys
 import hashlib
-import pathlib
+from pathlib import Path
 from typing import Tuple, Optional
 
 import requests
 from bs4 import BeautifulSoup
 
+from django.conf import settings
+
 
 class ScrapingSession:
 
-    CACHE_DIR = pathlib.Path(__file__).resolve().parent.parent / "cache" / "html"
-    IMAGE_DIR = pathlib.Path(__file__).resolve().parent.parent / "images"
+    CACHE_DIR = Path(getattr(
+        settings, "SCRAPER_CACHE_DIR",
+        Path(__file__).resolve().parent.parent / "cache" / "html"
+    ))
+    IMAGE_DIR = Path(getattr(
+        settings, "SCRAPER_IMAGE_DIR",
+        Path(__file__).resolve().parent.parent / "images"
+    ))
 
     def __init__(self, scraper_name: str, args: dict):
         self.s = requests.Session()
@@ -80,6 +88,6 @@ class ScrapingSession:
             downloaded = True
 
         if short_filename:
-            image_file = pathlib.Path(str(image_file)[len(str(self.IMAGE_DIR))+1:])
+            image_file = Path(str(image_file)[len(str(self.IMAGE_DIR))+1:])
 
         return image_file, downloaded
