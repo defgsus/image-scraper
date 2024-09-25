@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^search/?$',                      search.SearchImagesView.as_view(), name='search'),
 
     url(r'^rate-image/?$',                  rating.ImageRatingView.as_view(), name='image-rate'),
+    url(r'^viewed-image/?$',                rating.ImageViewedView.as_view(), name='image-viewed'),
 ]

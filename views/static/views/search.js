@@ -4,7 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
         csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value,
         search_url = document.querySelector(".search").getAttribute("data-url"),
         image_pk_url = document.querySelector(".search").getAttribute("data-image-pk-url"),
-        image_rate_url = document.querySelector(".search").getAttribute("data-image-rate-url");
+        image_rate_url = document.querySelector(".search").getAttribute("data-image-rate-url"),
+        image_viewed_url = document.querySelector(".search").getAttribute("data-image-viewed-url");
 
     let search_state = [
         {"type": "text", "value": "a beautiful sunset", "amount": 5},
@@ -96,6 +97,23 @@ document.addEventListener("DOMContentLoaded", () => {
         e.stopPropagation();
         extra_image_count += image_count;
         get_images(true);
+    }
+
+    function on_source_click(e) {
+        const
+            user = document.querySelector('input[name="rating-user"]').value,
+            pk = e.target.getAttribute("data-pk");
+
+        window
+            .fetch(
+                image_viewed_url,
+                {
+                    method: "post",
+                    headers: {'X-CSRFToken': csrftoken},
+                    body: JSON.stringify({pk, user}),
+                }
+            )
+            .catch(() => null);
     }
 
     let last_mouse_y, last_mouse_y_count = 0;
@@ -196,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
             html += `<div class="rating-buttons">${rating_buttons_html(image.pk, image.rating)}</div>`;
 
             html += `<b>${Math.round(image.score * 100) / 100}</b> `;
-            html += `<a class="source" href="${image.original_url}" target="_blank">source</a>`;
+            html += `<a class="source" href="${image.original_url}" target="_blank" data-pk="${image.pk}">source</a>`;
 
             html += `</div>`;
 
@@ -209,6 +227,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         for (const elem of document.querySelectorAll(".images .rating-button")) {
             elem.onclick = on_rating_click;
+        }
+        for (const elem of document.querySelectorAll("a.source")) {
+            elem.onclick = on_source_click;
         }
         document.querySelector("button.more-images").onclick = on_more_images_click;
     }

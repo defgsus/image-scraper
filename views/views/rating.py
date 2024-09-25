@@ -3,7 +3,7 @@ import json
 from django.views import View
 from django.http import HttpResponse
 
-from image_scraper.models import ImageModel, ImageRateModel
+from image_scraper.models import ImageModel, ImageRateModel, ImageViewModel
 
 
 class ImageRatingView(View):
@@ -40,5 +40,29 @@ class ImageRatingView(View):
 
             ImageRateModel.objects.create(**kwargs, rate=rate)
             return HttpResponse(status=201)
+
+
+
+class ImageViewedView(View):
+
+    def post(self, request):
+        params = json.loads(request.body.decode("utf-8"))
+        pk = params.get("pk")
+        user = params.get("user")
+
+        if pk is None or user is None:
+            return HttpResponse(status=500)
+
+        try:
+            image = ImageModel.objects.get(pk=pk)
+        except ImageModel.DoesNotExist:
+            return HttpResponse(status=404)
+
+        ImageViewModel.objects.create(
+            image=image,
+            user=user,
+        )
+
+        return HttpResponse(status=201)
 
 
